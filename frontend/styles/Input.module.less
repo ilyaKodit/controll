@@ -1,0 +1,39 @@
+@import "config";
+
+.container {
+    position: relative;
+}
+
+.input {
+    height: 30px;
+    width: 200px;
+    border: 2px solid rgb(231, 231, 231);
+    border-radius: 4px;
+    padding: 0 25px 0 10px;
+    color: @general_color_2;
+    outline: none;
+    transition: 0.05s;
+
+    &:focus {
+        border: 3px solid @general_color_2;
+        transition: 0.05s;
+    }
+}
+
+.image {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    height: 16px;
+}
+
+.notValid {
+    color: darkred;
+    border: 2px solid rgb(243, 94, 94);
+    transition: 0.05s;
+
+    &:focus {
+        border: 3px solid rgb(243, 94, 94);
+        transition: 0.05s;
+    }
+}
