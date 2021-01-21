@@ -1,0 +1,38 @@
+@import "config";
+
+.link {
+    height: 100%;
+    color: #ffffff;
+    padding: 0 20px;
+    font-family: "Sans-Narrow";
+    font-size: 20px;
+    line-height: 50px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #ffffff;
+        color: @general_color_1;
+
+        .line {
+            left: 0;
+            transition: 0.5s;
+        }
+    }
+
+    & .line {
+        position: absolute;
+        top: 45px;
+        left: -100%;
+        height: 5px;
+        width: 100%;
+        background-color: @general_color_2;
+    }
+
+    &:active {
+        background-color: @general_color_2;
+        transition: 0.2s;
+        color: #ffffff;
+    }
+}

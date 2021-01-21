@@ -1,0 +1,6 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  background-color: darkslateblue;
+}
