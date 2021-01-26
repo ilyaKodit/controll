@@ -37,9 +37,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   // // создать нового польователя
   if (req.method === 'POST') {
+    const { login, email, password }: bodyPOST = req.body;
+
+    if (!login || !email || !password) {
+      res.status(400).json({ 
+        status: 400,
+        message: 'Отсутствует обязательное поле',
+      });
+    }
+
     try {
       await mongo.connect();
-      const { login, email, password }: bodyPOST = req.body;
 
       const user = new Users({
         login,
@@ -61,6 +69,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         message: 'Ошибка сервера',
       });
     }
-    
   }
 };
