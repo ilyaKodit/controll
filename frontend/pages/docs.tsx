@@ -11,9 +11,9 @@ function Login() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Task Manager | login</title>
+        <title>Controll | Documentation</title>
       </Head>
-      <h1>Login</h1>
+      <h1>Documentation</h1>
     </div>
   );
 }

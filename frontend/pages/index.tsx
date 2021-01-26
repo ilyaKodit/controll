@@ -6,7 +6,7 @@ function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Task Manager</title>
+        <title>Controll</title>
       </Head>
       <h1>Главная</h1>
     </div>
