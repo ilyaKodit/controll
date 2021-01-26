@@ -12,7 +12,8 @@ const NavigationMenu = () => {
     <>
       <nav className={styles.container}>
         <NavItem href="/" value="Главная" />
-        <NavItem href="/login" value="Документация" />
+        <NavItem href="/docs" value="Документация" />
+        <NavItem href="/testing" value="Тестирование" />
         <Search />
       </nav>
     </>
