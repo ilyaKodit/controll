@@ -4,10 +4,10 @@ import Head from 'next/head';
 import styles from '../styles/Login.module.css';
 
 // interface Props {
-//   login: string,
+//   result: object,
 // }
 
-function Login() {
+function Docs() {
   return (
     <div className={styles.container}>
       <Head>
@@ -18,15 +18,25 @@ function Login() {
   );
 }
 
-export default Login;
+export default Docs;
 
 // export const getServerSideProps: GetServerSideProps<Props> = async () => {
-//   const res = await fetch('http://localhost:3000/api/login');
-//   const checkLogin = await res.json();
+//   const response = await fetch('http://localhost:3000/api/login', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({
+//       login: 'gluk',
+//       email: 'ilya.ilya.87@list.ru',
+//       password: '123',
+//     }),
+//   });
+//   const data = await response.json();
 
 //   return {
 //     props: {
-//       login: checkLogin.result,
+//       result: data,
 //     }
 //   }
 // };
