@@ -1,12 +1,14 @@
-import mongoose from 'mongoose';
-
 /*
   Сервис по ваимодействию с MongoDB через Mongoose
 */
 
+import mongoose from 'mongoose';
+
+import { MONGO_CLUSTER, MONGO_USER, MONGO_PASS, MONGO_DB } from '../config';
+
 export default class MongooseManager {
-  connect = async () => {
-    await mongoose.connect(`mongodb+srv://ilyaKodit:ilya-gluk@cluster.lxq5s.mongodb.net/project?retryWrites=true&w=majority`, {
+  async connect () {
+    await mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_CLUSTER}.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
