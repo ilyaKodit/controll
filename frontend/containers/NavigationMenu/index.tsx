@@ -3,10 +3,6 @@ import Search from '../Search';
 
 import styles from '../../styles/Navigation.module.css';
 
-const inputStyles = {
-  height: '30px',
-}
-
 const NavigationMenu = () => {
   return (
     <>

@@ -12,6 +12,7 @@ interface Props {
   pattern?: string,
   onKeyDown?: (e: React.KeyboardEvent) => void,
   onChange?: (e: React.ChangeEvent) => void,
+  value?: string,
   notValid?: boolean,
 }
 
@@ -23,6 +24,7 @@ const Input: FC<Props> = ({
   pattern,
   onKeyDown,
   onChange,
+  value,
   notValid,
 }) => {
   return (
@@ -36,6 +38,7 @@ const Input: FC<Props> = ({
         pattern={pattern || null}
         onKeyDown={onKeyDown || null}
         onChange={onChange || null}
+        value={value}
       />
       {inputMode === 'search' && <img className={styles.image} src="/images/search.png" />}
     </div>
