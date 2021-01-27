@@ -4,11 +4,12 @@ import MongooseManager from '../../utils/mongo';
 import { Users } from '../../models/mongo/users';
 
 const mongo = new MongooseManager;
+mongo.connect();
 
 interface bodyPOST {
-  login: string,
-  email: string,
-  password: string,
+  login: string | undefined,
+  email: string | undefined,
+  password: string | undefined,
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -16,23 +17,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // получить всех пользователей
   if (req.method === 'GET') {
     try {
-      await mongo.connect();
-      const result: object[] = await Users.find();
-
-      await mongo.disconnect();
-      res.status(200).json({ 
-        status: 200,
-        result,
+      Users.find().then((data: object[]) => {
+        
+        res.status(200).json({ 
+          status: 200,
+          data,
+        });
+        return;
       });
-      
+
     } catch (error) {
       res.status(500).json({ 
         status: 500,
         error,
         message: 'Ошибка сервера',
       });
+      return;
     }
-    
   }
 
   // // создать нового польователя
@@ -44,22 +45,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         status: 400,
         message: 'Отсутствует обязательное поле',
       });
+      return;
     }
 
     try {
-      await mongo.connect();
-
       const user = new Users({
         login,
         email,
         password,
       });
-      const newUser: object = await user.save();
 
-      await mongo.disconnect();
-      res.status(200).json({ 
-        status: 200,
-        result: newUser,
+      user.save().then((newUser: object) => {
+        res.status(200).json({ 
+          status: 200,
+          result: newUser,
+        });
+        return;
       });
 
     } catch (error) {
@@ -68,6 +69,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         error,
         message: 'Ошибка сервера',
       });
+      return;
     }
   }
 };
