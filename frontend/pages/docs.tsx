@@ -11,7 +11,7 @@ function Docs() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Controll | Documentation</title>
+        <title>Controll | Документация</title>
       </Head>
       <h1>Документация</h1>
     </div>

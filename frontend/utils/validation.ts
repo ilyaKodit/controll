@@ -1,5 +1,5 @@
 const validation = {
-  login: async (login: string) => {
+  login: (login: string) => {
     if (login.length < 5 && login !== '') {
       return {
         result: false,

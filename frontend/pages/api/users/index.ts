@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import MongooseManager from '../../utils/mongo';
-import { Users } from '../../models/mongo/users';
+import MongooseManager from '../../../utils/mongo';
+import { Users } from '../../../models/mongo/users';
 
 const mongo = new MongooseManager;
 mongo.connect();
