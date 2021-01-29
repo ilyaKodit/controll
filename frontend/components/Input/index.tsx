@@ -43,7 +43,7 @@ const Input: FC<Props> = ({
         value={value}
       />
       {inputMode === 'search' && <img className={styles.image} src="/images/search.png" />}
-      {errMsg && <p>{errMsg}</p>}
+      {errMsg && <p className={styles.message}>{errMsg}</p>}
     </div>
   )
 };

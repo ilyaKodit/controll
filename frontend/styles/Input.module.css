@@ -1,7 +1,7 @@
 .container {
   position: relative;
 }
-.container > p {
+.message {
   font-family: 'Sans-Narrow';
   font-size: 14px;
   color: #f35e5e;

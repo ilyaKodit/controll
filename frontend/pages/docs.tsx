@@ -13,7 +13,7 @@ function Docs() {
       <Head>
         <title>Controll | Documentation</title>
       </Head>
-      <h1>Documentation</h1>
+      <h1>Документация</h1>
     </div>
   );
 }
