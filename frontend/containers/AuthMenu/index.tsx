@@ -22,8 +22,13 @@ const AuthMenu = () => {
   const [loginWindow, setLoginWindow] = useState(false);
   const [isAuth, setIsAuth] = useState(true);
 
-  const [authLogin, setAuthLogin] = useState('');
+  const [authEmail, setAuthLogin] = useState('');
   const [authPass, setAuthPass] = useState('');
+
+  const [validAuth, setValidAuth] = useState({
+    status: true,
+    message: '',
+  });
 
   const [regLogin, setRegLogin] = useState('');
   const [regEmail, setRegEmail] = useState('');
@@ -132,10 +137,42 @@ const AuthMenu = () => {
     }
   };
 
-  const auth = (): void => {
-    clearState();
-    setIsAuth(true);
-    setLoginWindow(false);
+  const auth = async () => {
+    const response = await fetch(`${NEXT_URL}/api/users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ROUTER: 'auth',
+        email: authEmail,
+        password: authPass,
+      }),
+    });
+    const user = await response.json();
+
+    if (user.status === 200) {
+      console.log('Пользователь найден, добро пожаловать');
+      setValidAuth({
+        status: true,
+        message: '',
+      });
+
+      clearState();
+      setIsAuth(true);
+      setLoginWindow(false);
+    } else {
+      setValidAuth({
+        status: false,
+        message: 'Пользователь не найден',
+      });
+      setTimeout(() => {
+        setValidAuth({
+          status: true,
+          message: '',
+        });
+      }, 6000);
+    }
   };
 
   const registration = async () => {
@@ -148,19 +185,22 @@ const AuthMenu = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            ROUTER: 'registration',
             login: regLogin,
             email: regEmail,
             password: regPass1,
           }),
         });
-        const data = await response.json();
-    
-        if (data) {
-          console.log(data);
+        const user = await response.json();
+
+        if (user.status === 200) {
+          console.log(user.data);
           clearState();
           setIsAuth(true);
           setLoginWindow(false);
         }
+    
+        
       }
     }
   };
@@ -184,9 +224,10 @@ const AuthMenu = () => {
             <p className={styles.modalTitle}>Авторизация</p>
             <Input 
               style={inputStyle} 
-              placeholder="Введите логин" 
+              placeholder="Введите почту" 
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAuthLogin(e.target.value)} 
-              value={authLogin}
+              value={authEmail}
+              notValid={!validAuth.status}
             />
             <Input 
               style={inputStyle} 
@@ -194,6 +235,8 @@ const AuthMenu = () => {
               placeholder="Введите пароль"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAuthPass(e.target.value)}
               value={authPass}
+              notValid={!validAuth.status}
+              errMsg={!validAuth.status && validAuth.message}
             />
             <br/>
             <span className={styles.text}>или <a onClick={() => {setIsAuth(false)}}>зарегистрируйтесь</a></span>
@@ -213,7 +256,7 @@ const AuthMenu = () => {
               style={inputStyle}
               type="email"
               inputMode="email"
-              placeholder="Введите ваш email"
+              placeholder="Введите вашу почту"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegEmail(e.target.value)}
               value={regEmail}
               notValid={!validRegEmail.status}
