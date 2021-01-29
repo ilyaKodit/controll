@@ -18,14 +18,9 @@ const inputStyle = {
 }
 
 const AuthMenu = () => {
+  const [didMount, setDidMount] = useState(false);
   const [loginWindow, setLoginWindow] = useState(false);
   const [isAuth, setIsAuth] = useState(true);
-
-  const [error, setError] = useState({
-    status: false,
-    type: '',
-    message: '',
-  });
 
   const [authLogin, setAuthLogin] = useState('');
   const [authPass, setAuthPass] = useState('');
@@ -48,9 +43,19 @@ const AuthMenu = () => {
     message: '',
   });
 
+  useEffect(() => setDidMount(true), []);
+
   useEffect(() => {
-    validationReg();
-  }, [regLogin, regEmail, regPass1, regPass2]);
+    if (didMount) validationRegLogin();
+  }, [regLogin]);
+
+  useEffect(() => {
+    if (didMount) validationRegEmail();
+  }, [regEmail]);
+
+  useEffect(() => {
+    if (didMount) validationRegPass();
+  }, [regPass1, regPass2]);
 
   const ok = (): void => {
     if (isAuth) {
@@ -66,7 +71,7 @@ const AuthMenu = () => {
     setLoginWindow(false);
   };
 
-  const clearState = () => {
+  const clearState = (): void => {
     setAuthLogin('');
     setAuthPass('');
     setRegLogin('');
@@ -75,38 +80,7 @@ const AuthMenu = () => {
     setRegPass2('');
   };
 
-  const auth = () => {
-    clearState();
-    setIsAuth(true);
-    setLoginWindow(false);
-  };
-
-  const registration = async () => {
-
-    if (validRegLogin.status && validRegEmail.status && validRegPass.status) {
-      const response = await fetch(`${NEXT_URL}/api/users`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          login: regLogin,
-          email: regEmail,
-          password: regPass1,
-        }),
-      });
-      const data = await response.json();
-  
-      if (data) {
-        console.log(data);
-        clearState();
-        setIsAuth(true);
-        setLoginWindow(false);
-      }
-    }
-  };
-
-  const validationReg = (): void => {
+  const validationRegLogin = (): void => {
     if (validation.login(regLogin).result) {
       setValidRegLogin({
         status: true,
@@ -118,7 +92,9 @@ const AuthMenu = () => {
         message: validation.login(regLogin).message,
       });
     }
+  };
 
+  const validationRegEmail = (): void => {
     if (validation.email(regEmail).result) {
       setValidRegEmail({
         status: true,
@@ -130,7 +106,9 @@ const AuthMenu = () => {
         message: validation.email(regEmail).message,
       });
     }
+  };
 
+  const validationRegPass = (): void => {
     if (validation.passwords(regPass1, regPass2).result && validation.password(regPass1).result) {
       setValidRegPass({
         status: true,
@@ -150,6 +128,39 @@ const AuthMenu = () => {
           status: false,
           message: validation.passwords(regPass1, regPass2).message,
         });
+      }
+    }
+  };
+
+  const auth = (): void => {
+    clearState();
+    setIsAuth(true);
+    setLoginWindow(false);
+  };
+
+  const registration = async () => {
+
+    if (validRegLogin.status && validRegEmail.status && validRegPass.status) {
+      if (regLogin !== '' && regEmail !== '' && regPass1 !== '') {
+        const response = await fetch(`${NEXT_URL}/api/users`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            login: regLogin,
+            email: regEmail,
+            password: regPass1,
+          }),
+        });
+        const data = await response.json();
+    
+        if (data) {
+          console.log(data);
+          clearState();
+          setIsAuth(true);
+          setLoginWindow(false);
+        }
       }
     }
   };
@@ -196,6 +207,7 @@ const AuthMenu = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegLogin(e.target.value)}
               value={regLogin}
               notValid={!validRegLogin.status}
+              errMsg={!validRegLogin.status && validRegLogin.message}
             />
             <Input 
               style={inputStyle}
@@ -205,6 +217,7 @@ const AuthMenu = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegEmail(e.target.value)}
               value={regEmail}
               notValid={!validRegEmail.status}
+              errMsg={!validRegEmail.status && validRegEmail.message}
             />
             <Input 
               style={inputStyle}
@@ -213,6 +226,7 @@ const AuthMenu = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegPass1(e.target.value)}
               value={regPass1}
               notValid={!validRegPass.status}
+              errMsg={!validRegPass.status && validRegPass.message}
             />
             <Input 
               style={inputStyle}
@@ -221,6 +235,7 @@ const AuthMenu = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegPass2(e.target.value)}
               value={regPass2}
               notValid={!validRegPass.status}
+              errMsg={!validRegPass.status && validRegPass.message}
             />
             <br/>
             <span className={styles.text}>вурнуться к <a onClick={() => {setIsAuth(true)}}>авториациии</a></span>

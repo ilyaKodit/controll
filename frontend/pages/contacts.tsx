@@ -2,15 +2,15 @@ import Head from 'next/head';
 
 import styles from '../styles/Login.module.css';
 
-function Testing() {
+function Contacts() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Controll | Testing</title>
+        <title>Controll | Контакты</title>
       </Head>
-      <h1>Testing</h1>
+      <h1>Контакты</h1>
     </div>
   );
 }
 
-export default Testing;
+export default Contacts;
