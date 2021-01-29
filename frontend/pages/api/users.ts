@@ -17,8 +17,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // получить всех пользователей
   if (req.method === 'GET') {
     try {
+      mongo.connect();
       Users.find().then((data: object[]) => {
-        
+        mongo.disconnect();
         res.status(200).json({ 
           status: 200,
           data,
@@ -27,6 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
     } catch (error) {
+      mongo.disconnect();
       res.status(500).json({ 
         status: 500,
         error,
@@ -48,7 +50,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
 
+    if (login === '' || email === '' || password === '') {
+      res.status(400).json({ 
+        status: 400,
+        message: 'Поле не должно быть пустым',
+      });
+      return;
+    }
+
     try {
+      mongo.connect();
       const user = new Users({
         login,
         email,
@@ -56,6 +67,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
       user.save().then((newUser: object) => {
+        mongo.disconnect();
         res.status(200).json({ 
           status: 200,
           result: newUser,
@@ -64,6 +76,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
     } catch (error) {
+      mongo.disconnect();
       res.status(500).json({ 
         status: 500,
         error,

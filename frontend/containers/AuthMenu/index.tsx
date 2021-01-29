@@ -52,12 +52,13 @@ const AuthMenu = () => {
     validationReg();
   }, [regLogin, regEmail, regPass1, regPass2]);
 
-  const ok = (): void => {
+  const ok = async () => {
     if (isAuth) {
       auth();
     } else {
       registration();
     }
+    clearState();
   };
 
   const cencel = (): void => {
@@ -196,6 +197,7 @@ const AuthMenu = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegLogin(e.target.value)}
               value={regLogin}
               notValid={!validRegLogin.status}
+              errMsg={!validRegLogin.status && validRegLogin.message}
             />
             <Input 
               style={inputStyle}
@@ -205,6 +207,7 @@ const AuthMenu = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegEmail(e.target.value)}
               value={regEmail}
               notValid={!validRegEmail.status}
+              errMsg={!validRegEmail.status && validRegEmail.message}
             />
             <Input 
               style={inputStyle}
@@ -213,6 +216,7 @@ const AuthMenu = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegPass1(e.target.value)}
               value={regPass1}
               notValid={!validRegPass.status}
+              errMsg={!validRegPass.status && validRegPass.message}
             />
             <Input 
               style={inputStyle}
@@ -221,6 +225,7 @@ const AuthMenu = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegPass2(e.target.value)}
               value={regPass2}
               notValid={!validRegPass.status}
+              errMsg={!validRegPass.status && validRegPass.message}
             />
             <br/>
             <span className={styles.text}>вурнуться к <a onClick={() => {setIsAuth(true)}}>авториациии</a></span>

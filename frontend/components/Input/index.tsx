@@ -14,6 +14,7 @@ interface Props {
   onChange?: (e: React.ChangeEvent) => void,
   value?: string,
   notValid?: boolean,
+  errMsg?: string,
 }
 
 const Input: FC<Props> = ({
@@ -26,6 +27,7 @@ const Input: FC<Props> = ({
   onChange,
   value,
   notValid,
+  errMsg,
 }) => {
   return (
     <div className={styles.container}>
@@ -41,6 +43,7 @@ const Input: FC<Props> = ({
         value={value}
       />
       {inputMode === 'search' && <img className={styles.image} src="/images/search.png" />}
+      {errMsg && <p>{errMsg}</p>}
     </div>
   )
 };
