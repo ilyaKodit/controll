@@ -43,7 +43,11 @@ const AuthMenu = () => {
     status: true,
     message: '',
   });
-  const [validRegPass, setValidRegPass] = useState({
+  const [validRegPass1, setValidRegPass1] = useState({
+    status: true,
+    message: '',
+  });
+  const [validRegPass2, setValidRegPass2] = useState({
     status: true,
     message: '',
   });
@@ -115,21 +119,36 @@ const AuthMenu = () => {
 
   const validationRegPass = (): void => {
     if (validation.passwords(regPass1, regPass2).result && validation.password(regPass1).result) {
-      setValidRegPass({
+      setValidRegPass1({
+        status: true,
+        message: '',
+      });
+      setValidRegPass2({
         status: true,
         message: '',
       });
     } else {
       
       if (!validation.password(regPass1).result) {
-        setValidRegPass({
+        setValidRegPass1({
+          status: false,
+          message: validation.password(regPass1).message,
+        });
+      }
+
+      if (!validation.password(regPass2).result) {
+        setValidRegPass2({
           status: false,
           message: validation.password(regPass1).message,
         });
       }
 
       if (!validation.passwords(regPass1, regPass2).result) {
-        setValidRegPass({
+        setValidRegPass1({
+          status: false,
+          message: validation.passwords(regPass1, regPass2).message,
+        });
+        setValidRegPass2({
           status: false,
           message: validation.passwords(regPass1, regPass2).message,
         });
@@ -177,30 +196,54 @@ const AuthMenu = () => {
 
   const registration = async () => {
 
-    if (validRegLogin.status && validRegEmail.status && validRegPass.status) {
-      if (regLogin !== '' && regEmail !== '' && regPass1 !== '') {
-        const response = await fetch(`${NEXT_URL}/api/users`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ROUTER: 'registration',
-            login: regLogin,
-            email: regEmail,
-            password: regPass1,
-          }),
-        });
-        const user = await response.json();
+    if (regLogin === '') {
+      return setValidRegLogin({
+        status: false,
+        message: 'Поле обязательно для заполнения',
+      });
+    }
 
-        if (user.status === 200) {
-          console.log(user.data);
-          clearState();
-          setIsAuth(true);
-          setLoginWindow(false);
-        }
-    
-        
+    if (regEmail === '') {
+      return setValidRegEmail({
+        status: false,
+        message: 'Поле обязательно для заполнения',
+      });
+    }
+
+    if (regPass1 === '') {
+      return setValidRegPass1({
+        status: false,
+        message: 'Поле обязательно для заполнения',
+      });
+    }
+
+    if (regPass2 === '') {
+      return setValidRegPass2({
+        status: false,
+        message: 'Поле обязательно для заполнения',
+      });
+    }
+
+    if (validRegLogin.status && validRegEmail.status && validRegPass1.status && validRegPass2.status) {
+      const response = await fetch(`${NEXT_URL}/api/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ROUTER: 'registration',
+          login: regLogin,
+          email: regEmail,
+          password: regPass1,
+        }),
+      });
+      const user = await response.json();
+
+      if (user.status === 200) {
+        console.log(user.data);
+        clearState();
+        setIsAuth(true);
+        setLoginWindow(false);
       }
     }
   };
@@ -268,8 +311,8 @@ const AuthMenu = () => {
               placeholder="Введите пароль"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegPass1(e.target.value)}
               value={regPass1}
-              notValid={!validRegPass.status}
-              errMsg={!validRegPass.status && validRegPass.message}
+              notValid={!validRegPass1.status}
+              errMsg={!validRegPass1.status && validRegPass1.message}
             />
             <Input 
               style={inputStyle}
@@ -277,8 +320,8 @@ const AuthMenu = () => {
               placeholder="Введите пароль еще раз"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegPass2(e.target.value)}
               value={regPass2}
-              notValid={!validRegPass.status}
-              errMsg={!validRegPass.status && validRegPass.message}
+              notValid={!validRegPass2.status}
+              errMsg={!validRegPass2.status && validRegPass2.message}
             />
             <br/>
             <span className={styles.text}>вурнуться к <a onClick={() => {setIsAuth(true)}}>авториациии</a></span>
